@@ -54,6 +54,7 @@ pub mod pallet {
         #[pallet::weight(1000)]
         pub fn create(origin: OriginFor<T>) -> DispatchResult {
             let sender = ensure_signed(origin)?;
+            let kitty_id = Self::next_kitty_id();
 
             // Generate a random 128bit value
             let payload = (
@@ -69,7 +70,6 @@ pub mod pallet {
 
             // Create and store kitty
             let kitty = Kitty(dna);
-            let kitty_id = Self::next_kitty_id();
             Kitties::<T>::insert(&sender, kitty_id, kitty.clone());
             NextKittyId::<T>::put(kitty_id + 1);
 
